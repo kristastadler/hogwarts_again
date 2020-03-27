@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 RSpec.describe "as a visitor", type: :feature do
-  it "can visit the students index page and see a list of students and the number of professors each student has" do
+  it "can visit the students index page and see an alphabetical list of students and the number of professors each student has" do
 
     snape = Professor.create(name: "Severus Snape", age: 45, specialty: "Potions")
     hagarid = Professor.create(name: "Rubus Hagarid", age: 38 , specialty: "Care of Magical Creatures")
@@ -20,6 +20,10 @@ RSpec.describe "as a visitor", type: :feature do
 
   visit '/students'
 
+  expect(page.all('.individual-student')[0]).to have_content("#{malfoy.name}")
+  expect(page.all('.individual-student')[1]).to have_content("#{harry.name}")
+  expect(page.all('.individual-student')[2]).to have_content("#{longbottom.name}")
+
   within "#student-#{harry.id}" do
     expect(page).to have_content("Harry Potter: #{harry.professors.count}")
   end
@@ -30,7 +34,7 @@ RSpec.describe "as a visitor", type: :feature do
 
   within "#student-#{malfoy.id}" do
     expect(page).to have_content("Draco Malfoy: #{malfoy.professors.count}")
-  end 
+  end
 
 end
 end
